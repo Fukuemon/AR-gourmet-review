@@ -10,7 +10,7 @@ const DynamicModelViewer = dynamic(
     { ssr: false } // This line is important. It's what prevents server-side render
 )
 
-export default function Home() {
+export default function ARview() {
     const [modelSrc, setModelSrc] = useState("/slime.glb");
 
     return (
