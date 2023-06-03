@@ -120,7 +120,7 @@ const BottomNavBar = () => (
 </div>
 );
 
-export default function Layout({ children, title = "グルグラ by Nextjs", showHeader = true, showFooter = true }) {
+const Layout2 = ({ children, title = "グルグラ by Nextjs", showHeader = true, showFooter = true }) => {
     return (
     <div>
         <Head>
@@ -134,3 +134,5 @@ export default function Layout({ children, title = "グルグラ by Nextjs", sho
     </div>
     );
 }
+
+export default Layout2;
