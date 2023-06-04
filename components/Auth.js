@@ -40,7 +40,30 @@ export default function Auth() {
         } catch (err) {
             alert(err);
         }
-        };  
+        };
+
+    const authEmail = async (e) => {
+        e.preventDefault();
+        if (isLogin) { //ログインの場合
+            login();
+        } else { //そうでない場合
+            //registerAPIで新規アカウントを作成する
+            await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/register/`, { 
+                method: "POST",
+                body: JSON.stringify({ email: email, password: password }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }).then((res) => {
+                if (res.status === 400) {
+                    throw "authentication failed";
+                }
+            });
+            //作成したら、そのままログインする
+            login();
+        }
+
+    };
     
 
 return (
