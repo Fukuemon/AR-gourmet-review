@@ -7,13 +7,17 @@ const cookie = new Cookie();
 
 export default function Auth() {
     const router = useRouter();
+
+    // useState フック：　email, password, isLogin の状態を管理
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLogin, setIsLogin] = useState(true);
 
+    // ログインの非同期関数を定義
     const login = async () => {
         try {
-            await fetch( //エンドポイントをetchする
+            // fetch を用いて、指定された API エンドポイントに POST リクエストを送信
+            await fetch(
                 `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/auth/jwt/create/`,
                 {
                     method: "POST",
@@ -42,11 +46,13 @@ export default function Auth() {
         }
         };
 
+    // email を用いた認証の非同期関数
     const authEmail = async (e) => {
         e.preventDefault();
         if (isLogin) { //ログインの場合
             login();
         } else { //そうでない場合
+            try{
             //registerAPIで新規アカウントを作成する
             await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/register/`, { 
                 method: "POST",
@@ -61,8 +67,10 @@ export default function Auth() {
             });
             //作成したら、そのままログインする
             login();
+            } catch (err) {
+                alert(err);
+            }
         }
-
     };
     
 
