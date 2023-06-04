@@ -117,24 +117,29 @@ return (
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder='パスワードを入力'
+                value={password}
+                onChange={(e) => {
+                    setEmail(e.target.value)
+                }}
+                
                 />
             </div>
             </div>
 
             <div className="flex items-center justify-center">
                 <div className="text-sm">
-                <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Forgot password?
-                </a>
+                    {/* クリックするとisLoginの状態が反転する */}
+                    <span onClick={() => setIsLogin(!isLogin)} className='cursor-pointer font-medium text-white hover:text-indigo-500'>
+                        {isLogin ? "ログイン？" : "サインアップ？"}
+                    </span>
                 </div>
             </div>
 
             <div>
             <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-                Sign in
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                {isLogin ? "ログイン" : "新規作成"}
             </button>
             </div>
         </form>
