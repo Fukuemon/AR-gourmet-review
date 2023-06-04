@@ -1,7 +1,44 @@
 import { LockClosedIcon } from '@heroicons/react/solid'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import Cookie from "universal-cookie"
 
+const cookie = new Cookie();
 
 export default function Auth() {
+    const router = useRouter();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [isLogin, setIsLogin] = useState(true);
+
+    const login = async () => {
+        await fetch( //エンドポイントをetchする
+            `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/auth/jwt/create/`,
+            {
+                method: "POST",
+                body: JSON.stringify({ email: email, password: password}),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        )
+        //fetchの結果をresで受け取る
+        .then((res) => {
+            if (res.status === 400) { //認証に失敗した場合
+                throw "authentication failed"; //エラーを返す
+            } else if (res.ok) { //成功した場合
+                return res.json(); //JSONオブジェクトに変換して返す
+            }
+            })
+        //cookieにアクセストークンを格納うする
+        .then((data) => {
+            const options = { path: "/" };
+            cookie.set("access_token", data.access, options); //ルートのpath以下でcookieが使える
+        })
+        router.path("/main-page") //成功した場合main-pageに移動する
+        }
+    
+
 return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
