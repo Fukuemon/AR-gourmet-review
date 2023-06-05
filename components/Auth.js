@@ -135,8 +135,8 @@ export default function Auth() {
                 className="cursor-pointer font-medium text-blue hover:text-indigo-500"
               >
                 {isLogin
-                  ? "まだアカウントをお持ちでないですか？"
-                  : "ログイン？"}
+                  ? "まだアカウントを作っていない場合はこちら"
+                  : "ログインはこちら"}
               </span>
             </div>
           </div>
