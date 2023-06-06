@@ -59,7 +59,7 @@ export default function Auth() {
     } else {
       try {
         //registerAPIで新規アカウントを作成する
-        await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/register`, {
+        await fetch(`${process.env.NEXT_PUBLIC_RESTAPI_URL}api/register/`, {
           method: "POST",
           body: JSON.stringify({ email: email, password: password }),
           headers: {
