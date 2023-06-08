@@ -1,17 +1,12 @@
-import Cookie from "universal-cookie";
-import { useReducer } from "react";
 import { useRouter } from "next/router";
+import { getPostList } from "../lib/posts";
 import Layout from "../components/Layout";
 import Head from "next/head";
+import Post from "../components/Post";
 
-const cookie = new Cookie();
-
-export default function MainPage() {
+export default function MainPage({ filteredPosts }) {
   const router = useRouter();
-  const logout = () => {
-    cookie.remove("access_token");
-    router.push("/");
-  };
+
   return (
     <Layout title="Main">
       <Head>
@@ -20,8 +15,20 @@ export default function MainPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <ul>
+          {Array.isArray(filteredPosts) &&
+            filteredPosts.map((post) => <Post key={post.id} post={post} />)}
+        </ul>
         <h1 className="text-2xl font-bold mb-4">Coming Soon...</h1>
       </main>
     </Layout>
   );
+}
+
+export async function getStaticProps() {
+  const filteredPosts = await getPostList();
+  console.log(filteredPosts);
+  return {
+    props: { filteredPosts },
+  };
 }
