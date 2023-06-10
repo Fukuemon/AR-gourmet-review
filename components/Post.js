@@ -2,14 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Post({ post }) {
-  // URLをデコード
-  const decodedUrl = decodeURIComponent(post.menu_item_photo);
-  console.log(decodedUrl);
-
   return (
     <div className="border rounded-md overflow-hidden shadow-md my-3">
       <Image
-        src={decodedUrl} // デコードされたURLを使う
+        src={post.menu_item_photo} // デコードされたURLを使う
         alt={post.menu_item}
         width={500}
         height={300}
