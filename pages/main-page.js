@@ -1,5 +1,5 @@
+import useSWR from "swr";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
 import Cookie from "universal-cookie";
 import Layout from "../components/Layout";
 import Head from "next/head";
@@ -7,29 +7,31 @@ import Post from "../components/Post";
 
 const cookie = new Cookie();
 
+const fetcher = async (url) => {
+  const token = cookie.get("access_token");
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `JWT ${token}`,
+    },
+  });
+  if (!res.ok) {
+    throw new Error("Error while fetching posts");
+  }
+  const posts = await res.json();
+  return posts;
+};
+
 export default function MainPage() {
   const router = useRouter();
-  const [filteredPosts, setFilteredPosts] = useState([]);
+  const { data: filteredPosts, error } = useSWR(
+    `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/post/`,
+    fetcher
+  );
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const token = cookie.get("access_token");
-      console.log(token);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/post/`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `JWT ${token}`,
-          },
-        }
-      );
-      const posts = await res.json();
-      setFilteredPosts(posts);
-    };
-    fetchPosts();
-  }, []);
+  if (error) return <div>Failed to load posts</div>;
+  if (!filteredPosts) return <div>Loading...</div>;
 
   return (
     <Layout title="Main">
