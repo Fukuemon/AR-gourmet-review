@@ -39,7 +39,7 @@ export default function Auth() {
         .then((data) => {
           if (data && "access" in data) {
             const options = { path: "/" };
-            cookie.set("access_token", `${data.access}`, options); //ルートのpath以下でcookieが使える
+            cookie.set("access_token", data.access, options); //ルートのpath以下でcookieが使える
           } else {
             throw new Error("Invalid login data");
           }

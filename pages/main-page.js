@@ -1,11 +1,35 @@
 import { useRouter } from "next/router";
-import { getPostList } from "../lib/posts";
+import { useState, useEffect } from "react";
+import Cookie from "universal-cookie";
 import Layout from "../components/Layout";
 import Head from "next/head";
 import Post from "../components/Post";
 
-export default function MainPage({ filteredPosts }) {
+const cookie = new Cookie();
+
+export default function MainPage() {
   const router = useRouter();
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const token = cookie.get("access_token");
+      console.log(token);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_RESTAPI_URL}api/post/`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `JWT ${token}`,
+          },
+        }
+      );
+      const posts = await res.json();
+      setFilteredPosts(posts);
+    };
+    fetchPosts();
+  }, []);
 
   return (
     <Layout title="Main">
@@ -23,12 +47,4 @@ export default function MainPage({ filteredPosts }) {
       </main>
     </Layout>
   );
-}
-
-export async function getStaticProps() {
-  const filteredPosts = await getPostList();
-  console.log(filteredPosts);
-  return {
-    props: { filteredPosts },
-  };
 }
